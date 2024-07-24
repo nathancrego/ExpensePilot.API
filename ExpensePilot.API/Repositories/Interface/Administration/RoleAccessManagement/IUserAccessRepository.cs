@@ -5,9 +5,10 @@ namespace ExpensePilot.API.Repositories.Interface.Administration.RoleAccessManag
     public interface IUserAccessRepository
     {
         Task<UserAccess> CreateAsync(UserAccess userAccess);
-        Task<UserAccess> UpdateAsync(UserAccess userAccess);
-        Task<UserAccess> DeleteAsync(int id);
+        Task<UserAccess?> UpdateAsync(UserAccess userAccess);
+        Task<UserAccess?> DeleteAsync(int id);
         Task <IEnumerable<UserAccess>> GetAllAsync();
+        Task<UserAccess?> GetAccessByIDAsync(int id);
         
     }
 }

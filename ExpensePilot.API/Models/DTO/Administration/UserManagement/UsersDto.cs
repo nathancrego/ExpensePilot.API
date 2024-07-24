@@ -13,7 +13,9 @@ namespace ExpensePilot.API.Models.DTO.Administration.UserManagement
         public string LName { get; set; }
         public string Email { get; set; }
         public int? ManagerID { get; set; }
+        public string ManagerName { get; set; }
         public int? DepartmentID { get; set; }
+        public string DepartmentName { get; set; }
         public DateTime LastUpdated { get; set; }
     }
 }

@@ -18,12 +18,14 @@ namespace ExpensePilot.API.Repositories.Implementation.Administration.RoleAccess
         {
             await dbContext.tblEPUserAccess.AddAsync(userAccess);
             await dbContext.SaveChangesAsync();
+            await dbContext.Entry(userAccess).Reference(u => u.User).LoadAsync();
+            await dbContext.Entry(userAccess).Reference(ur => ur.UserRole).LoadAsync();
             return userAccess;
         }
 
-        public async Task<UserAccess> DeleteAsync(int id)
+        public async Task<UserAccess?> DeleteAsync(int id)
         {
-            var existingAccess = await dbContext.tblEPUserAccess.FirstOrDefaultAsync(us => us.UserAccessID == id);
+            var existingAccess = await dbContext.tblEPUserAccess.Include(u => u.User).Include(ur => ur.UserRole).FirstOrDefaultAsync(us => us.UserAccessID == id);
             if(existingAccess is null)
             {
                 return null;
@@ -36,19 +38,26 @@ namespace ExpensePilot.API.Repositories.Implementation.Administration.RoleAccess
         public async Task<IEnumerable<UserAccess>> GetAllAsync()
         {
             return await dbContext.tblEPUserAccess
-               .Include(ua => ua.User)
-               .Include(ua => ua.UserRole).ToListAsync();
+               .Include(u => u.User)
+               .Include(ur => ur.UserRole).ToListAsync();
         }
 
-        public async Task<UserAccess> UpdateAsync(UserAccess userAccess)
+        public async Task<UserAccess?> GetAccessByIDAsync(int id)
         {
-            var existingAccess = await dbContext.tblEPUserAccess.FirstOrDefaultAsync(us => us.UserAccessID == userAccess.UserAccessID);
+            return await dbContext.tblEPUserAccess.Include(u=>u.User).Include(ur=>ur.UserRole).FirstOrDefaultAsync(ua => ua.UserAccessID == id);
+        }
+
+        public async Task<UserAccess?> UpdateAsync(UserAccess userAccess)
+        {
+            var existingAccess = await dbContext.tblEPUserAccess.Include(u => u.User).Include(ur => ur.UserRole).FirstOrDefaultAsync(us => us.UserAccessID == userAccess.UserAccessID);
             if(existingAccess is null)
             {
                 return null;
             }
             dbContext.Entry(existingAccess).CurrentValues.SetValues(userAccess);
             await dbContext.SaveChangesAsync();
+            await dbContext.Entry(existingAccess).Reference(u => u.User).LoadAsync();
+            await dbContext.Entry(existingAccess).Reference(ur => ur.UserRole).LoadAsync();
             return existingAccess;
         }
     }

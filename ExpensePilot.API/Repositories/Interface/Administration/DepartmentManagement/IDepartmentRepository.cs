@@ -6,6 +6,7 @@ namespace ExpensePilot.API.Repositories.Interface.Administration.DepartmentManag
     {
         Task<Department> CreateAsync (Department department);
         Task <IEnumerable<Department>> GetAllAsync();
+        Task<Department> GetByIdAsync (int id);
         Task<Department> UpdateAsync (Department department);
         Task<Department> DeleteAsync (int id);
     }

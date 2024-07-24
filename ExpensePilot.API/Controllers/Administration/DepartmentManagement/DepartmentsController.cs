@@ -56,6 +56,24 @@ namespace ExpensePilot.API.Controllers.Administration.DepartmentManagement
             return Ok(response);
         }
 
+        [HttpGet]
+        [Route("{id:int}")]
+        public async Task<IActionResult> GetDepartmentByID([FromRoute] int id)
+        {
+            var existingDepartment = await departmentRepository.GetByIdAsync(id);
+            if(existingDepartment == null)
+            {
+                return NotFound();
+            }
+            var response = new DepartmentDto
+            {
+                DptID = existingDepartment.DptID,
+                DepartmentName = existingDepartment.DepartmentName,
+                LastUpdated = existingDepartment.LastUpdated
+            };
+            return Ok(response);
+        }
+
         [HttpPut]
         [Route("{id:int}")]
         public async Task<IActionResult> EditDepartment([FromRoute] int id, EditDepartmentDto editDepartment)

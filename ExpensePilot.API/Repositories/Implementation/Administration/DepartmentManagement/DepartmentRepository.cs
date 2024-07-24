@@ -37,6 +37,11 @@ namespace ExpensePilot.API.Repositories.Implementation.Administration.Department
             return await dbContext.tblEPDepartments.ToListAsync();
         }
 
+        public async Task<Department> GetByIdAsync(int id)
+        {
+            return await dbContext.tblEPDepartments.FirstOrDefaultAsync(d => d.DptID == id);
+        }
+
         public async Task<Department> UpdateAsync(Department department)
         {
             var existingDepartment = await dbContext.tblEPDepartments.FirstOrDefaultAsync(d => d.DptID == department.DptID);
@@ -45,6 +50,7 @@ namespace ExpensePilot.API.Repositories.Implementation.Administration.Department
                 return null;
             }
             dbContext.Entry(existingDepartment).CurrentValues.SetValues(department);
+            await dbContext.SaveChangesAsync();
             return department;
         }
     }

@@ -32,6 +32,8 @@ namespace ExpensePilot.API.Controllers.Administration.RoleAccessManagement
                 UserAccessID = addua.UserAccessID,
                 UserID = addua.UserID,
                 UserRoleID = addua.UserRoleID,
+                Logon = addua.User != null ? $"{addua.User.FName} {addua.User.LName} - {addua.User.Logon}" : null,
+                Role = addua.UserRole != null ? addua.UserRole.Role:null,
                 LastUpdated = addua.LastUpdated
             };
             return Ok(response);
@@ -48,13 +50,35 @@ namespace ExpensePilot.API.Controllers.Administration.RoleAccessManagement
                 {
                     UserAccessID = item.UserAccessID,
                     UserID = item.UserID,
-                    Logon = item.User.Logon,
                     UserRoleID = item.UserRoleID,
-                    Role = item.UserRole.Role,
+                    Logon = item.User != null ? $"{item.User.FName} {item.User.LName} - {item.User.Logon}" : null,
+                    Role = item.UserRole != null ? item.UserRole.Role : null,
                     LastUpdated = item.LastUpdated,
                     
                 });
             }
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("{id:int}")]
+        public async Task<IActionResult> GetUserAccessId([FromRoute] int id)
+        {
+            var existingAccess = await userAccessRepository.GetAccessByIDAsync(id);
+            if(existingAccess is null)
+            {
+                return NotFound();
+            }
+            //Map domain to dto
+            var response = new UserAccessDto
+            {
+                UserAccessID = existingAccess.UserAccessID,
+                UserID = existingAccess.UserID,
+                UserRoleID = existingAccess.UserRoleID,
+                Logon = existingAccess.User != null ? $"{existingAccess.User.FName} {existingAccess.User.LName} - {existingAccess.User.Logon}" : null,
+                Role = existingAccess.UserRole != null ? existingAccess.UserRole.Role : null,
+                LastUpdated = existingAccess.LastUpdated
+            };
             return Ok(response);
         }
 
@@ -80,6 +104,8 @@ namespace ExpensePilot.API.Controllers.Administration.RoleAccessManagement
                 UserAccessID = editua.UserAccessID,
                 UserID = editua.UserID,
                 UserRoleID = editua.UserRoleID,
+                Logon = editua.User != null ? $"{editua.User.FName} {editua.User.LName} - {editua.User.Logon}" : null,
+                Role = editua.UserRole != null ? editua.UserRole.Role : null,
                 LastUpdated = editua.LastUpdated
             };
             return Ok(response);
@@ -99,6 +125,8 @@ namespace ExpensePilot.API.Controllers.Administration.RoleAccessManagement
                 UserAccessID = existingAccess.UserAccessID,
                 UserID = existingAccess.UserID,
                 UserRoleID = existingAccess.UserRoleID,
+                Logon = existingAccess.User != null ? $"{existingAccess.User.FName} {existingAccess.User.LName} - {existingAccess.User.Logon}" : null,
+                Role = existingAccess.UserRole != null ? existingAccess.UserRole.Role : null,
                 LastUpdated = existingAccess.LastUpdated
 
             };

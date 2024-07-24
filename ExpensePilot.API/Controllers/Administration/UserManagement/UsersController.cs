@@ -2,6 +2,7 @@
 using ExpensePilot.API.Models.Domain.Administration.UserManagement;
 using ExpensePilot.API.Models.DTO.Administration.UserManagement;
 using ExpensePilot.API.Repositories.Interface.Administration.UserManagement;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,7 +44,9 @@ namespace ExpensePilot.API.Controllers.Administration.UserManagement
                 LName = addu.LName,
                 Email = addu.Email,
                 ManagerID = addu.ManagerID,
+                ManagerName = addu.Manager != null ? $"{addu.Manager.FName} {addu.Manager.LName}" : null,
                 DepartmentID = addu.DepartmentID,
+                DepartmentName = addu.Department != null ? addu.Department.DepartmentName : null,
                 LastUpdated = addu.LastUpdated
             };
             return Ok(response);
@@ -66,7 +69,9 @@ namespace ExpensePilot.API.Controllers.Administration.UserManagement
                     LName = user.LName,
                     Email = user.Email,
                     ManagerID = user.ManagerID,
+                    ManagerName = user.Manager != null ? $"{user.Manager.FName} {user.Manager.LName}" : null,
                     DepartmentID = user.DepartmentID,
+                    DepartmentName = user.Department != null ? $"{user.Department.DepartmentName}" : null,
                     LastUpdated = user.LastUpdated
                 });
             }
@@ -92,7 +97,9 @@ namespace ExpensePilot.API.Controllers.Administration.UserManagement
                 LName = existingUser.LName,
                 Email = existingUser.Email,
                 ManagerID = existingUser.ManagerID,
+                ManagerName = existingUser.Manager != null ? $"{existingUser.Manager.FName} {existingUser.Manager.LName}" : null,
                 DepartmentID = existingUser.DepartmentID,
+                DepartmentName = existingUser.Department != null ? $"{existingUser.Department.DepartmentName}" : null,
                 LastUpdated = existingUser.LastUpdated
             };
             return Ok(response);
@@ -127,8 +134,10 @@ namespace ExpensePilot.API.Controllers.Administration.UserManagement
                 FName = editu.FName,
                 LName = editu.LName,
                 Email = editu.Email,
-                DepartmentID = editu.DepartmentID,
                 ManagerID = editu.ManagerID,
+                ManagerName = editu.Manager != null ? $"{editu.Manager.FName} {editu.Manager.LName}" : null,
+                DepartmentID = editu.DepartmentID,
+                DepartmentName = editu.Department != null ? editu.Department.DepartmentName : null,
                 LastUpdated = editu.LastUpdated
             };
             return Ok(response);
@@ -153,7 +162,9 @@ namespace ExpensePilot.API.Controllers.Administration.UserManagement
                 LName = existingUser.LName,
                 Email = existingUser.Email,
                 ManagerID = existingUser.ManagerID,
+                ManagerName = existingUser.Manager != null ? $"{existingUser.Manager.FName} {existingUser.Manager.LName}" : null,
                 DepartmentID = existingUser.DepartmentID,
+                DepartmentName = existingUser.Department != null ? $"{existingUser.Department.DepartmentName}" : null,
                 LastUpdated = existingUser.LastUpdated
             };
             return Ok(response);

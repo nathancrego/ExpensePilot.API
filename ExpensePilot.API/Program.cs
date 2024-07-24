@@ -1,13 +1,18 @@
 using ExpensePilot.API.Data;
 using ExpensePilot.API.Models.Domain.Administration.UserManagement;
 using ExpensePilot.API.Repositories.Implementation.Administration.DepartmentManagement;
+using ExpensePilot.API.Repositories.Implementation.Administration.ExpenseCategoryManagement;
 using ExpensePilot.API.Repositories.Implementation.Administration.RoleAccessManagement;
 using ExpensePilot.API.Repositories.Implementation.Administration.UserManagement;
+using ExpensePilot.API.Repositories.Implementation.Expense;
 using ExpensePilot.API.Repositories.Interface.Administration.DepartmentManagement;
+using ExpensePilot.API.Repositories.Interface.Administration.ExpenseCategoryManagement;
 using ExpensePilot.API.Repositories.Interface.Administration.RoleAccessManagement;
 using ExpensePilot.API.Repositories.Interface.Administration.UserManagement;
+using ExpensePilot.API.Repositories.Interface.Expense;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +37,8 @@ builder.Services.AddScoped<IUserRolesRepository, UserRolesRepository>();
 builder.Services.AddScoped<IUserAccessRepository, UserAccessRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IAuthLoginRepository, AuthLoginRepository>();
+builder.Services.AddScoped<IExpenseCategoryRepository, ExpenseCategoryRepository>();
+builder.Services.AddScoped<IExpensesRepository, ExpensesRepository>();
 
 builder.Services.AddSingleton<IPasswordHasher<Users>, PasswordHasher<Users>>();
 
@@ -47,7 +54,24 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+//Implementation of Cors
+app.UseCors(options =>
+{
+    options.AllowAnyHeader();
+    options.AllowAnyOrigin();
+    options.AllowAnyMethod();
+});
+
+app.UseAuthentication();
+
 app.UseAuthorization();
+
+//Static files
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot")),
+    RequestPath = "/wwwroot"
+});
 
 app.MapControllers();
 

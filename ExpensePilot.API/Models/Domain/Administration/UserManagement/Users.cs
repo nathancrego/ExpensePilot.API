@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using ExpensePilot.API.Models.Domain.Administration.DepartmentManagement;
 using ExpensePilot.API.Models.Domain.Administration.RoleAccessManagement;
+using ExpensePilot.API.Models.Domain.Expense;
 
 namespace ExpensePilot.API.Models.Domain.Administration.UserManagement
 {
@@ -23,9 +24,11 @@ namespace ExpensePilot.API.Models.Domain.Administration.UserManagement
         public DateTime LastUpdated { get; set; }
         //navigation properties
         public Department Department { get; set; }
+        public Users Manager { get; set; }
 
         public ICollection<UserAccess> tblEPUserAccess { get; set; }
         public Login Login { get; set; }
+        public ICollection<Expenses> tblEPExpenses { get; set; }
 
 
     }

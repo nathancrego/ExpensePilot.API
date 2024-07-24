@@ -8,9 +8,9 @@ namespace ExpensePilot.API.Models.DTO.Administration.RoleAccessManagement
     {
         public int UserAccessID { get; set; }
         public int UserID { get; set; }
-        public int UserRoleID { get; set; }
+        public int? UserRoleID { get; set; }
         public string Logon {  get; set; }
-        public string Role {  get; set; }
+        public string? Role {  get; set; }
         public DateTime LastUpdated { get; set; }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using ExpensePilot.API.Models.Domain.Administration.DepartmentManagement;
+using ExpensePilot.API.Models.Domain.Administration.ExpenseCategoryManagement;
 using ExpensePilot.API.Models.Domain.Administration.RoleAccessManagement;
 using ExpensePilot.API.Models.Domain.Administration.UserManagement;
+using ExpensePilot.API.Models.Domain.Expense;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpensePilot.API.Data
@@ -16,6 +18,9 @@ namespace ExpensePilot.API.Data
         public DbSet<UserAccess> tblEPUserAccess { get; set;}
         public DbSet<Department> tblEPDepartments { get; set; }
         public DbSet<Login> tblEPLogin { get; set; }
+        public DbSet<Expenses> tblEPExpenses { get; set; }
+        public DbSet<ExpenseCategory> tblEPExpenseCategory { get; set; }
+        public DbSet<InvoiceReceipt> tblEPInvoiceReceipt { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -55,6 +60,25 @@ namespace ExpensePilot.API.Data
 
             modelBuilder.Entity<Login>()
                 .Property(l => l.HashedPassword)
+                .IsRequired();
+
+            //Configure user and expense relationship
+            modelBuilder.Entity<Expenses>()
+                .HasOne(e => e.User)
+                .WithMany(u => u.tblEPExpenses)
+                .HasForeignKey(e => e.UserID);
+
+            //Configure Expense and expense category relationship
+            modelBuilder.Entity<Expenses>()
+                .HasOne(ec => ec.ExpenseCategory)
+                .WithMany(e => e.tblEPExpenses)
+                .HasForeignKey(ec => ec.ExpenseCategoryID);
+
+            //Configure Expense and InvoiceReceipt relationship
+            modelBuilder.Entity<Expenses>()
+                .HasOne(e => e.InvoiceReceipt)
+                .WithOne(i => i.Expense)
+                .HasForeignKey<Expenses>(e => e.InvoiceReceiptID)
                 .IsRequired();
         }
 

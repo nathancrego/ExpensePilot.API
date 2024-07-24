@@ -42,6 +42,26 @@ namespace ExpensePilot.API.Migrations
                     b.ToTable("tblEPDepartments");
                 });
 
+            modelBuilder.Entity("ExpensePilot.API.Models.Domain.Administration.ExpenseCategoryManagement.ExpenseCategory", b =>
+                {
+                    b.Property<int>("CategoryID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryID"));
+
+                    b.Property<string>("CategoryName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("CategoryID");
+
+                    b.ToTable("tblEPExpenseCategory");
+                });
+
             modelBuilder.Entity("ExpensePilot.API.Models.Domain.Administration.RoleAccessManagement.UserAccess", b =>
                 {
                     b.Property<int>("UserAccessID")
@@ -56,7 +76,7 @@ namespace ExpensePilot.API.Migrations
                     b.Property<int>("UserID")
                         .HasColumnType("int");
 
-                    b.Property<int>("UserRoleID")
+                    b.Property<int?>("UserRoleID")
                         .HasColumnType("int");
 
                     b.HasKey("UserAccessID");
@@ -151,7 +171,85 @@ namespace ExpensePilot.API.Migrations
 
                     b.HasIndex("DepartmentID");
 
+                    b.HasIndex("ManagerID");
+
                     b.ToTable("tblEPUsers");
+                });
+
+            modelBuilder.Entity("ExpensePilot.API.Models.Domain.Expense.Expenses", b =>
+                {
+                    b.Property<int>("ExpenseID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ExpenseID"));
+
+                    b.Property<int>("ExpenseCategoryID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ExpenseDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExpenseName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("InvoiceNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("InvoiceReceiptID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("InvoiceVendorName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("TotalAmount")
+                        .HasColumnType("float");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.HasKey("ExpenseID");
+
+                    b.HasIndex("ExpenseCategoryID");
+
+                    b.HasIndex("InvoiceReceiptID")
+                        .IsUnique();
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("tblEPExpenses");
+                });
+
+            modelBuilder.Entity("ExpensePilot.API.Models.Domain.Expense.InvoiceReceipt", b =>
+                {
+                    b.Property<int>("ReceiptID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReceiptID"));
+
+                    b.Property<string>("FileExtension")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastUpdated")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ReceiptName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UrlPath")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ReceiptID");
+
+                    b.ToTable("tblEPInvoiceReceipt");
                 });
 
             modelBuilder.Entity("ExpensePilot.API.Models.Domain.Administration.RoleAccessManagement.UserAccess", b =>
@@ -164,9 +262,7 @@ namespace ExpensePilot.API.Migrations
 
                     b.HasOne("ExpensePilot.API.Models.Domain.Administration.RoleAccessManagement.UserRoles", "UserRole")
                         .WithMany("tblEPUserAccess")
-                        .HasForeignKey("UserRoleID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("UserRoleID");
 
                     b.Navigation("User");
 
@@ -190,12 +286,50 @@ namespace ExpensePilot.API.Migrations
                         .WithMany("tblEPUsers")
                         .HasForeignKey("DepartmentID");
 
+                    b.HasOne("ExpensePilot.API.Models.Domain.Administration.UserManagement.Users", "Manager")
+                        .WithMany()
+                        .HasForeignKey("ManagerID");
+
                     b.Navigation("Department");
+
+                    b.Navigation("Manager");
+                });
+
+            modelBuilder.Entity("ExpensePilot.API.Models.Domain.Expense.Expenses", b =>
+                {
+                    b.HasOne("ExpensePilot.API.Models.Domain.Administration.ExpenseCategoryManagement.ExpenseCategory", "ExpenseCategory")
+                        .WithMany("tblEPExpenses")
+                        .HasForeignKey("ExpenseCategoryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ExpensePilot.API.Models.Domain.Expense.InvoiceReceipt", "InvoiceReceipt")
+                        .WithOne("Expense")
+                        .HasForeignKey("ExpensePilot.API.Models.Domain.Expense.Expenses", "InvoiceReceiptID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ExpensePilot.API.Models.Domain.Administration.UserManagement.Users", "User")
+                        .WithMany("tblEPExpenses")
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ExpenseCategory");
+
+                    b.Navigation("InvoiceReceipt");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ExpensePilot.API.Models.Domain.Administration.DepartmentManagement.Department", b =>
                 {
                     b.Navigation("tblEPUsers");
+                });
+
+            modelBuilder.Entity("ExpensePilot.API.Models.Domain.Administration.ExpenseCategoryManagement.ExpenseCategory", b =>
+                {
+                    b.Navigation("tblEPExpenses");
                 });
 
             modelBuilder.Entity("ExpensePilot.API.Models.Domain.Administration.RoleAccessManagement.UserRoles", b =>
@@ -208,7 +342,15 @@ namespace ExpensePilot.API.Migrations
                     b.Navigation("Login")
                         .IsRequired();
 
+                    b.Navigation("tblEPExpenses");
+
                     b.Navigation("tblEPUserAccess");
+                });
+
+            modelBuilder.Entity("ExpensePilot.API.Models.Domain.Expense.InvoiceReceipt", b =>
+                {
+                    b.Navigation("Expense")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
