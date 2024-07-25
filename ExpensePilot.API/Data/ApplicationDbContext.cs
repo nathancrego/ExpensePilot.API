@@ -21,6 +21,7 @@ namespace ExpensePilot.API.Data
         public DbSet<Expenses> tblEPExpenses { get; set; }
         public DbSet<ExpenseCategory> tblEPExpenseCategory { get; set; }
         public DbSet<InvoiceReceipt> tblEPInvoiceReceipt { get; set; }
+        public DbSet<ExpenseStatus> tblEPExpenseStatus { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -73,6 +74,12 @@ namespace ExpensePilot.API.Data
                 .HasOne(ec => ec.ExpenseCategory)
                 .WithMany(e => e.tblEPExpenses)
                 .HasForeignKey(ec => ec.ExpenseCategoryID);
+
+            //Configure Expense and expense status relationship
+            modelBuilder.Entity<Expenses>()
+                .HasOne(es => es.ExpenseStatus)
+                .WithMany(e => e.tblEPExpenses)
+                .HasForeignKey(es => es.ExpenseStatusID);
 
             //Configure Expense and InvoiceReceipt relationship
             modelBuilder.Entity<Expenses>()

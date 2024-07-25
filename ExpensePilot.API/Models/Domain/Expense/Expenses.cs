@@ -18,9 +18,11 @@ namespace ExpensePilot.API.Models.Domain.Expense
         public double TotalAmount { get; set; }
         public int InvoiceReceiptID { get; set; }
         public int UserID { get; set; }
+        public int ExpenseStatusID { get; set; }
 
         //Navigation property
         public ExpenseCategory ExpenseCategory { get; set; }
+        public ExpenseStatus ExpenseStatus { get; set; }
         public InvoiceReceipt InvoiceReceipt { get; set; }
         public Users User { get; set; }
     }

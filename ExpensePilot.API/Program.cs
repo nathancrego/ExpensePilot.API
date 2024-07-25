@@ -38,6 +38,7 @@ builder.Services.AddScoped<IUserAccessRepository, UserAccessRepository>();
 builder.Services.AddScoped<IDepartmentRepository, DepartmentRepository>();
 builder.Services.AddScoped<IAuthLoginRepository, AuthLoginRepository>();
 builder.Services.AddScoped<IExpenseCategoryRepository, ExpenseCategoryRepository>();
+builder.Services.AddScoped<IExpenseStatusRepository, ExpenseStatusRepository>();
 builder.Services.AddScoped<IExpensesRepository, ExpensesRepository>();
 
 builder.Services.AddSingleton<IPasswordHasher<Users>, PasswordHasher<Users>>();

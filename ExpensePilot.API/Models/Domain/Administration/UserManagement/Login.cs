@@ -9,6 +9,8 @@ namespace ExpensePilot.API.Models.Domain.Administration.UserManagement
         public string HashedPassword { get; set; }
         public DateTime LastUpdated { get; set; }
         public int UserID { get; set; }
+        public string ResetPasswordToken { get; set; }
+        public DateTime? ResetPasswordTokenExpiry { get; set; }
 
         public Users User { get; set; }
     }
