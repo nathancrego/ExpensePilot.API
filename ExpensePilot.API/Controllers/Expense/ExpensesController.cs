@@ -1,4 +1,5 @@
-﻿using ExpensePilot.API.Models.Domain.Expense;
+﻿using ExpensePilot.API.Models.Domain.Administration.ExpenseCategoryManagement;
+using ExpensePilot.API.Models.Domain.Expense;
 using ExpensePilot.API.Models.DTO.Expense;
 using ExpensePilot.API.Repositories.Interface.Expense;
 using Microsoft.AspNetCore.Http;
@@ -33,7 +34,8 @@ namespace ExpensePilot.API.Controllers.Expense
                 InvoiceNumber = addExpenses.InvoiceNumber,
                 InvoiceVendorName = addExpenses.InvoiceVendorName,
                 TotalAmount = addExpenses.TotalAmount,
-                UserID = addExpenses.UserID
+                UserID = addExpenses.UserID,
+                ExpenseStatusID = addExpenses.ExpenseStatusID
             };
             expense = await expensesRepository.CreateAsync(expense, receiptUploadDto);
             var response = new ExpensesDto
@@ -45,7 +47,8 @@ namespace ExpensePilot.API.Controllers.Expense
                 InvoiceNumber = expense.InvoiceNumber,
                 InvoiceVendorName = expense.InvoiceVendorName,
                 TotalAmount = expense.TotalAmount,
-                UserID = expense.UserID
+                UserID = expense.UserID,
+                ExpenseStatusID = expense.ExpenseStatusID
             };
             return Ok(response);
         }
@@ -67,9 +70,35 @@ namespace ExpensePilot.API.Controllers.Expense
                     InvoiceNumber = expense.InvoiceNumber,
                     InvoiceVendorName = expense.InvoiceVendorName,
                     TotalAmount = expense.TotalAmount,
-                    UserID = expense.UserID
+                    UserID = expense.UserID,
+                    ExpenseStatusID = expense.ExpenseStatusID
                 });
             }
+            return Ok(response);
+        }
+
+        [HttpGet]
+        [Route("{id:int}")]
+        public async Task<IActionResult> GetExpenseID([FromRoute] int id)
+        {
+            var existingExpense = await expensesRepository.GetByIDAsync(id);
+            if(existingExpense == null)
+            {
+                return NotFound();
+            }
+            var response = new ExpensesDto
+            {
+                ExpenseID = existingExpense.ExpenseID,
+                ExpenseName = existingExpense.ExpenseName,
+                ExpenseDescription = existingExpense.ExpenseDescription,
+                ExpenseCategoryID = existingExpense.ExpenseCategoryID,
+                InvoiceNumber = existingExpense.InvoiceNumber,
+                InvoiceVendorName = existingExpense.InvoiceVendorName,
+                TotalAmount = existingExpense.TotalAmount,
+                InvoiceReceiptID = existingExpense.InvoiceReceiptID,
+                UserID = existingExpense.UserID,
+                ExpenseStatusID = existingExpense.ExpenseStatusID
+            };
             return Ok(response);
         }
 
@@ -93,7 +122,8 @@ namespace ExpensePilot.API.Controllers.Expense
                 InvoiceNumber = editExpenses.InvoiceNumber,
                 InvoiceVendorName = editExpenses.InvoiceVendorName,
                 TotalAmount = editExpenses.TotalAmount,
-                UserID = editExpenses.UserID
+                UserID = editExpenses.UserID,
+                ExpenseStatusID = editExpenses.ExpenseStatusID
             };
 
             // Call the update method
@@ -116,7 +146,8 @@ namespace ExpensePilot.API.Controllers.Expense
                 InvoiceVendorName = updatedExpense.InvoiceVendorName,
                 TotalAmount = updatedExpense.TotalAmount,
                 InvoiceReceiptID = updatedExpense.InvoiceReceiptID,
-                UserID = updatedExpense.UserID
+                UserID = updatedExpense.UserID,
+                ExpenseStatusID = updatedExpense.ExpenseStatusID
             };
 
             // Return the response
@@ -141,7 +172,8 @@ namespace ExpensePilot.API.Controllers.Expense
                 InvoiceNumber = deleteExpense.InvoiceNumber,
                 InvoiceVendorName = deleteExpense.InvoiceVendorName,
                 TotalAmount = deleteExpense.TotalAmount,
-                UserID = deleteExpense.UserID
+                UserID = deleteExpense.UserID,
+                ExpenseStatusID = deleteExpense.ExpenseStatusID
             };
             return Ok(response);
         }

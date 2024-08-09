@@ -13,5 +13,6 @@ namespace ExpensePilot.API.Models.DTO.Expense
         public double TotalAmount { get; set; }
         public int InvoiceReceiptID { get; set; }
         public int UserID { get; set; }
+        public int ExpenseStatusID { get; set; }
     }
 }

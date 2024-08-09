@@ -3,6 +3,7 @@ using ExpensePilot.API.Models.Domain.Administration.ExpenseCategoryManagement;
 using ExpensePilot.API.Models.Domain.Administration.RoleAccessManagement;
 using ExpensePilot.API.Models.Domain.Administration.UserManagement;
 using ExpensePilot.API.Models.Domain.Expense;
+using ExpensePilot.API.Models.Domain.Policies;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpensePilot.API.Data
@@ -22,6 +23,7 @@ namespace ExpensePilot.API.Data
         public DbSet<ExpenseCategory> tblEPExpenseCategory { get; set; }
         public DbSet<InvoiceReceipt> tblEPInvoiceReceipt { get; set; }
         public DbSet<ExpenseStatus> tblEPExpenseStatus { get; set; }
+        public DbSet<Policy> tblEPPolicy { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

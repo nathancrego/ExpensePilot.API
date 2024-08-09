@@ -9,5 +9,6 @@
         public string InvoiceVendorName { get; set; }
         public double TotalAmount { get; set; }
         public int UserID { get; set; }
+        public int ExpenseStatusID { get; set; }
     }
 }

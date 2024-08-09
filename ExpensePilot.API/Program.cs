@@ -5,11 +5,13 @@ using ExpensePilot.API.Repositories.Implementation.Administration.ExpenseCategor
 using ExpensePilot.API.Repositories.Implementation.Administration.RoleAccessManagement;
 using ExpensePilot.API.Repositories.Implementation.Administration.UserManagement;
 using ExpensePilot.API.Repositories.Implementation.Expense;
+using ExpensePilot.API.Repositories.Implementation.Policies;
 using ExpensePilot.API.Repositories.Interface.Administration.DepartmentManagement;
 using ExpensePilot.API.Repositories.Interface.Administration.ExpenseCategoryManagement;
 using ExpensePilot.API.Repositories.Interface.Administration.RoleAccessManagement;
 using ExpensePilot.API.Repositories.Interface.Administration.UserManagement;
 using ExpensePilot.API.Repositories.Interface.Expense;
+using ExpensePilot.API.Repositories.Interface.Policies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
@@ -40,6 +42,7 @@ builder.Services.AddScoped<IAuthLoginRepository, AuthLoginRepository>();
 builder.Services.AddScoped<IExpenseCategoryRepository, ExpenseCategoryRepository>();
 builder.Services.AddScoped<IExpenseStatusRepository, ExpenseStatusRepository>();
 builder.Services.AddScoped<IExpensesRepository, ExpensesRepository>();
+builder.Services.AddScoped<IPolicyRepository, PolicyRepository>();
 
 builder.Services.AddSingleton<IPasswordHasher<Users>, PasswordHasher<Users>>();
 

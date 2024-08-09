@@ -7,6 +7,7 @@ namespace ExpensePilot.API.Repositories.Interface.Expense
     {
         Task<Expenses> CreateAsync(Expenses expenses, InvoiceReceiptUploadDto invoiceReceiptUpload);
         Task<IEnumerable<Expenses>> GetAllAsync ();
+        Task<Expenses?> GetByIDAsync (int id);
         Task<Expenses?> UpdateAsync (Expenses updatedExpenses, InvoiceReceiptUploadDto invoiceReceiptUpload);
         Task<Expenses?> DeleteAsync (int id);
     }

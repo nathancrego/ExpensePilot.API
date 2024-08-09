@@ -121,6 +121,11 @@ namespace ExpensePilot.API.Repositories.Implementation.Expense
             return await dbContext.tblEPExpenses.ToListAsync();
         }
 
+        public async Task<Expenses?> GetByIDAsync(int id)
+        {
+            return await dbContext.tblEPExpenses.FirstOrDefaultAsync(e => e.ExpenseID == id);
+        }
+
         public async Task<Expenses?> UpdateAsync(Expenses updatedExpenses, InvoiceReceiptUploadDto invoiceReceiptUpload)
         {
             // Fetch the existing Expense using the primary key (ExpenseID)
